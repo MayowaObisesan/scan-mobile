@@ -1,0 +1,1 @@
+ALTER TABLE `messages` ADD `local_created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL;
