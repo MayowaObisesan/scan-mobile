@@ -1,15 +1,19 @@
 // components/payments/PaymentWalletsSheet.tsx
 import React, {useRef, useState} from 'react';
-import {View, TextInput, TouchableOpacity, ScrollView} from 'react-native';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '~/components/ui/sheet';
+import {ScrollView, TextInput, TouchableOpacity, View} from 'react-native';
 import {Ionicons} from "@expo/vector-icons";
 import {useWallets} from "~/hooks/useWallets";
 import {I_Profile} from "~/hooks/useProfile";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '~/components/ui/accordion';
 import {Keypair} from "@solana/web3.js";
 import {Text} from "~/components/ui/text"
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
+// import {BottomSheetModal} from "@gorhom/bottom-sheet";
+import {
+  BottomSheetComponent,
+  BottomSheetContent,
+  BottomSheetHeader,
+  BottomSheetTitle
+} from "~/components/ui/bottom-sheet-component";
 import {Button} from "~/components/ui/button";
 
 interface PaymentFormSheetProps {
@@ -29,15 +33,16 @@ export interface PaymentFormData {
   message: string;
 }
 
-export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
-                                                                    isOpen,
-                                                                    onClose,
-                                                                    onSubmit,
-                                                                    type,
-                                                                    recipient,
-                                                                  }) => {
-  const { walletsList, isLoading, activeWallet, selectWallet } = useWallets();
-  const paymentFormSheetRef = useRef<BottomSheetModal>(null);
+export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = (
+  {
+    isOpen,
+    onClose,
+    onSubmit,
+    type,
+    recipient,
+  }) => {
+  const {walletsList, isLoading, activeWallet, selectWallet} = useWallets();
+  const paymentFormSheetRef = useRef(null);
 
   const [formData, setFormData] = useState<PaymentFormData>({
     walletKeypair: activeWallet,
@@ -53,12 +58,12 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
 
   const handleSubmit = () => {
     onSubmit(formData);
-    setFormData({walletId: "", amount: '', label: '', memo: '', message: '', walletKeypair: null });
+    setFormData({walletId: "", amount: '', label: '', memo: '', message: '', walletKeypair: null});
     onClose();
   };
 
   return (
-    <BottomSheet ref={paymentFormSheetRef} open={isOpen} onOpenChange={onClose}>
+    <BottomSheetComponent open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent>
         <BottomSheetHeader>
           <BottomSheetTitle>
@@ -98,13 +103,14 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
 
             {/* Dropdown Options */}
             {isSelectOpen && (
-              <ScrollView className="absolute top-full left-0 right-0 mt-1 border border-gray-300 rounded-lg bg-background z-50 max-h-40">
+              <ScrollView
+                className="absolute top-full left-0 right-0 mt-1 border border-gray-300 rounded-lg bg-background z-50 max-h-40">
                 <ScrollView>
                   {walletsList?.map((wallet) => (
                     <TouchableOpacity
                       key={wallet.id}
                       onPress={() => {
-                        setFormData({ ...formData, walletId: wallet.id, walletKeypair: wallet.keypair });
+                        setFormData({...formData, walletId: wallet.id, walletKeypair: wallet.keypair});
                         setIsSelectOpen(false);
                       }}
                       className={`p-4 border-b border-gray-200 ${
@@ -125,7 +131,7 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
             className="p-4 border border-input rounded-lg bg-background text-secondary-foreground"
             placeholder="Amount"
             value={formData.amount}
-            onChangeText={(text) => setFormData({ ...formData, amount: text })}
+            onChangeText={(text) => setFormData({...formData, amount: text})}
             keyboardType="numeric"
             placeholderTextColor="#666"
           />
@@ -133,7 +139,7 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
             className="p-4 border border-gray-300 rounded-lg bg-background text-secondary-foreground"
             placeholder="Add a short description"
             value={formData.label}
-            onChangeText={(text) => setFormData({ ...formData, label: text })}
+            onChangeText={(text) => setFormData({...formData, label: text})}
             placeholderTextColor="#666"
           />
           {/*<TextInput
@@ -160,7 +166,7 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
                   className="p-2 border border-gray-300 rounded-lg"
                   placeholder="(optional) Additional information about this transfer or payment"
                   value={formData.message}
-                  onChangeText={(text) => setFormData({ ...formData, message: text })}
+                  onChangeText={(text) => setFormData({...formData, message: text})}
                   multiline
                   numberOfLines={3}
                   placeholderTextColor="#666"
@@ -179,6 +185,6 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
           </Button>
         </View>
       </BottomSheetContent>
-    </BottomSheet>
+    </BottomSheetComponent>
   );
 };

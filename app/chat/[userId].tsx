@@ -50,8 +50,8 @@ import {toast} from "sonner-native";
 import {Message, MessageWithDecryptedMessage} from "~/db/schema";
 import {FlashList} from "@shopify/flash-list";
 import {LinearGradient} from "expo-linear-gradient";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
-import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet-component";
+// import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
 import {Button} from "~/components/ui/button";
 import {Ionicons} from "@expo/vector-icons";
 import {LucidePin, LucideTrash, LucideTrash2} from "lucide-react-native";
@@ -109,7 +109,7 @@ export default function ChatPage() {
     console.log("App State is available, user Id", userId);
   }
 
-  AppState.addEventListener('change', (state) => {
+  /*AppState.addEventListener('change', (state) => {
     console.log("CHAT PAGE IS IN STATE", state);
     if (state === 'active') {
       console.log("CHAT PAGE IS ACTIVE", threadId);
@@ -117,7 +117,7 @@ export default function ChatPage() {
     } else {
       console.log("CHAT PAGE IS NOT ACTIVE");
     }
-  })
+  })*/
 
   /*AppState.addEventListener('blur', (state) => {
     console.log("CHAT PAGE IS IN BLUR");
@@ -200,7 +200,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
   const recordingTimerRef = useRef<NodeJS.Timeout>();
   const sendNewMessageAnimation = useRef(false);
-  const chatPressOptionsSheetRef = useRef<BottomSheetModal>(null);
+  const chatPressOptionsSheetRef = useRef(null);
   const currentChatBubbleRef = useRef<Partial<MessageWithDecryptedMessage> | null>(null);
   const [showChatOptionsSheet, setShowChatOptionsSheet] = useState<boolean>(false);
 
@@ -581,7 +581,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
           }}
           onLongPress={() => {
             currentChatBubbleRef.current = item;
-            chatPressOptionsSheetRef.current?.present(item.id)
+            // chatPressOptionsSheetRef.current?.present(item.id)
             setShowChatOptionsSheet(true)
             // handleChatActions(item.id)
           }}
@@ -820,8 +820,8 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
 
           </PageBody>
 
-          <BottomSheet
-            ref={chatPressOptionsSheetRef}
+          <BottomSheetComponent
+            // ref={chatPressOptionsSheetRef}
             snapPoints={[300]}
             open={showChatOptionsSheet}
             onOpenChange={() => setShowChatOptionsSheet(false)}
@@ -888,7 +888,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
                 </View>
               </View>
             </BottomSheetContent>
-          </BottomSheet>
+          </BottomSheetComponent>
         </ImageBackground>
       </PageContainer>
     </>

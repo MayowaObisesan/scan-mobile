@@ -19,7 +19,7 @@ import {PaymentOptionsSheet} from "~/components/chats/payments/PaymentOptionsShe
 import {PaymentFormData, PaymentFormSheet} from "~/components/chats/payments/PaymentFormSheet";
 import {Text} from "~/components/ui/text";
 import GifSearch from 'react-native-gif-search';
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
+// import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import SolarWalletIcon from "~/icon/WalletIcon";
 import SolarSendDuotoneIcon from "~/icon/SendDuotoneIcon";
 import SolarMicrophone3BoldDuotoneIcon from "~/icon/Microphone3BoldDuotoneIcon";
@@ -81,7 +81,7 @@ const ChatInput: React.FC<ChatInputProps> = (
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentFormType, setPaymentFormType] = useState<'link' | 'payment'>('link');
-  const paymentFormSheetRef = useRef<BottomSheetModal>(null);
+  const paymentFormSheetRef = useRef(null);
 
   const handleSend = () => {
     if (message.trim()) {

@@ -14,6 +14,7 @@ export function AIInputBox2(props: TextInputProps) {
           placeholder="Ask AI anything..."
           placeholderTextColor="#a5b4fc"
           style={styles.input}
+          clearButtonMode={"always"}
           {...props}
         />
       </View>

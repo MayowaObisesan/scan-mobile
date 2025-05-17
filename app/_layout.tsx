@@ -16,7 +16,7 @@ import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {QueryClient} from "@tanstack/react-query";
 import {Toaster} from "sonner-native";
-import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+// import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client'
 import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -148,7 +148,7 @@ export default function RootLayout() {
         <AppDataProvider>
           <ThemeProvider value={theme}>
             <GestureHandlerRootView>
-              <BottomSheetModalProvider>
+              {/*<BottomSheetModalProvider>*/}
                 <SafeAreaProvider>
                   {/*<PaperProvider theme={theme}>*/}
                   <SafeAreaView
@@ -195,7 +195,7 @@ export default function RootLayout() {
                   </SafeAreaView>
                   {/*</PaperProvider>*/}
                 </SafeAreaProvider>
-              </BottomSheetModalProvider>
+              {/*</BottomSheetModalProvider>*/}
             </GestureHandlerRootView>
           </ThemeProvider>
         </AppDataProvider>

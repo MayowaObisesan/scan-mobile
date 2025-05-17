@@ -19,7 +19,7 @@ import {LucideX} from "lucide-react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {useSyncProfile} from "~/hooks/useSyncProfile";
 import {useProfile} from "~/hooks/useProfile";
-import {useChatContactsContext, useContactsContext} from "~/contexts/ContactsContext";
+import {useChatContactsContext, useContactsContext, usePhoneContactsContext} from "~/contexts/ContactsContext";
 import {useAuthContext} from "~/contexts/AuthContext";
 import {syncEngine} from "~/sync/syncEngine";
 import {threadRepository} from "~/db/threads";
@@ -56,7 +56,8 @@ export default function HomeScreen() {
   const {user, loading: userLoading} = useAuthContext();
   const [searchQuery, setSearchQuery] = useState('')
   // const {chatContacts, isLoading: chatContactsLoading, refetch} = useChatContactsContext();
-  const {data: chatContacts, isLoading: chatContactsLoading, refetch} = useChatContactsProfile(user!);
+  // const {data: chatContacts, isLoading: chatContactsLoading, refetch} = useChatContactsProfile(user!);
+  const {scanAccounts: chatContacts, isLoading: chatContactsLoading, refetch} = usePhoneContactsContext();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
   const [appState, setAppState] = useState(AppState.currentState);
   console.log("CHAT CONTACTS", chatContacts?.length);
@@ -69,7 +70,7 @@ export default function HomeScreen() {
     // e.g., AsyncStore.setItem(`threadId:${threadId}`, JSON.stringify({ lastOpened: Date.now() }))
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       setAppState(nextAppState);
       console.log("HOME PAGE IS IN APP STATE", nextAppState);
@@ -85,7 +86,7 @@ export default function HomeScreen() {
     return () => {
       subscription.remove();
     };
-  }, [appState]);
+  }, [appState]);*/
 
   const exploreItems = [
     /*{ id: '1', title: 'Send', icon: 'send' },
@@ -292,81 +293,81 @@ export default function HomeScreen() {
               )}
             </View>
 
-            {chatContactsLoading ? (
+            {/*{chatContactsLoading ? (
               <ActivityIndicator size="large" className="mt-8"/>
             ) : (
-              <FlatList
-                data={filteredContacts}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={{paddingVertical: 8}}
-                ItemSeparatorComponent={() => (
-                  <View className="h-[1px] bg-gray-100 my-1"/>
-                )}
-                /*renderItem={async ({item}) => {
-                  const latestMessage = await threadRepository.getLatestLocalThreadMessage(item.chatThread?.id!)
-                  const decryptedMessage = latestMessage ? decryptMessage(latestMessage) : ""
-                  return (
-                    /!*<Pressable
-                      className="flex-row items-center p-4 bg-background rounded-xl"
-                      style={({pressed}) => [
-                        {
-                          opacity: pressed ? 0.7 : 1,
-                          backgroundColor: pressed ? '#f8f8f8' : '#fff'
-                        }
-                      ]}
-                      onPress={() => router.push(`/chat/${item.id}`)}
-                    >*!/
-                    <Link
-                      href={{
-                        pathname: '/chat/[userId]',
-                        params: {userId: item.id}
-                      }}
-                      className="flex-row rounded-2xl"
-                    >
-                      <View className={"flex flex-row items-center gap-x-3 p-4"}>
-                        <View className="h-16 w-16 bg-secondary/80 rounded-full items-center justify-center">
-                          <Text className="text-lg font-semibold">
-                            {item.name[0].toUpperCase()}
-                          </Text>
-                        </View>
-                        <View className={"gap-y-0.5"}>
-                          <Text className="text-base font-semibold">{user?.phone === item?.phone ? "Me" : item.name}</Text>
-                          {/!*<Text className="text-gray-500 text-sm">{item.phone}</Text>*!/}
-                          {decryptedMessage &&
-                            <View className={"flex flex-row justify-between items-center gap-x-1"}>
-                              <Badge className={"px-1 bg-blue-600/90 border-0"}>
-                                  <Text>{formatDate(latestMessage?.localCreatedAt!, "HH:mm aaa")}</Text>
-                              </Badge>
-                              <Text className="text-gray-500 text-sm" numberOfLines={1}>{decryptedMessage}</Text>
-                              {/!*<Text className="text-gray-500 text-sm" numberOfLines={1}>{formatDate(latestMessage?.localCreatedAt!, "HH:mm")}</Text>*!/}
-                              {/!*
-                              Show the date if the date is yesterday or older
-                              <Text className="text-gray-500 text-sm" numberOfLines={1}>{formatDate(latestMessage?.localCreatedAt, "MMM dd, yy HH:mm")}</Text>
-                              *!/}
-                            </View>
-                          }
-                          {user?.phone === item?.phone && !decryptedMessage &&
-                            <View className={"flex flex-row justify-between items-center gap-x-1"}>
-                              <Text className="text-gray-500 text-sm" numberOfLines={1}>Message yourself</Text>
-                            </View>
-                          }
-                        </View>
+            )}*/}
+            <FlatList
+              data={filteredContacts}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{paddingVertical: 8}}
+              ItemSeparatorComponent={() => (
+                <View className="h-[1px] bg-gray-100 my-1"/>
+              )}
+              /*renderItem={async ({item}) => {
+                const latestMessage = await threadRepository.getLatestLocalThreadMessage(item.chatThread?.id!)
+                const decryptedMessage = latestMessage ? decryptMessage(latestMessage) : ""
+                return (
+                  /!*<Pressable
+                    className="flex-row items-center p-4 bg-background rounded-xl"
+                    style={({pressed}) => [
+                      {
+                        opacity: pressed ? 0.7 : 1,
+                        backgroundColor: pressed ? '#f8f8f8' : '#fff'
+                      }
+                    ]}
+                    onPress={() => router.push(`/chat/${item.id}`)}
+                  >*!/
+                  <Link
+                    href={{
+                      pathname: '/chat/[userId]',
+                      params: {userId: item.id}
+                    }}
+                    className="flex-row rounded-2xl"
+                  >
+                    <View className={"flex flex-row items-center gap-x-3 p-4"}>
+                      <View className="h-16 w-16 bg-secondary/80 rounded-full items-center justify-center">
+                        <Text className="text-lg font-semibold">
+                          {item.name[0].toUpperCase()}
+                        </Text>
                       </View>
-                    </Link>
-                    // </Pressable>
-                  )
-                }}*/
-                renderItem={({item}) => <ChatListItem item={item} user={user!} />}
-                ListEmptyComponent={() => (
-                  <View className="items-center justify-center py-8">
-                    <Text className="text-gray-500">No contacts found</Text>
-                  </View>
-                )}
-                refreshControl={
-                  <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-                }
-              />
-            )}
+                      <View className={"gap-y-0.5"}>
+                        <Text className="text-base font-semibold">{user?.phone === item?.phone ? "Me" : item.name}</Text>
+                        {/!*<Text className="text-gray-500 text-sm">{item.phone}</Text>*!/}
+                        {decryptedMessage &&
+                          <View className={"flex flex-row justify-between items-center gap-x-1"}>
+                            <Badge className={"px-1 bg-blue-600/90 border-0"}>
+                                <Text>{formatDate(latestMessage?.localCreatedAt!, "HH:mm aaa")}</Text>
+                            </Badge>
+                            <Text className="text-gray-500 text-sm" numberOfLines={1}>{decryptedMessage}</Text>
+                            {/!*<Text className="text-gray-500 text-sm" numberOfLines={1}>{formatDate(latestMessage?.localCreatedAt!, "HH:mm")}</Text>*!/}
+                            {/!*
+                            Show the date if the date is yesterday or older
+                            <Text className="text-gray-500 text-sm" numberOfLines={1}>{formatDate(latestMessage?.localCreatedAt, "MMM dd, yy HH:mm")}</Text>
+                            *!/}
+                          </View>
+                        }
+                        {user?.phone === item?.phone && !decryptedMessage &&
+                          <View className={"flex flex-row justify-between items-center gap-x-1"}>
+                            <Text className="text-gray-500 text-sm" numberOfLines={1}>Message yourself</Text>
+                          </View>
+                        }
+                      </View>
+                    </View>
+                  </Link>
+                  // </Pressable>
+                )
+              }}*/
+              renderItem={({item}) => <ChatListItem item={item} user={user!} />}
+              ListEmptyComponent={() => (
+                <View className="items-center justify-center py-8">
+                  <Text className="text-gray-500">No contacts found</Text>
+                </View>
+              )}
+              refreshControl={
+                <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+              }
+            />
           </View>
         </View>
       </PageBody>

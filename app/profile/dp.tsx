@@ -12,8 +12,8 @@ import { supabase } from '~/supabase/client'
 import { Text } from '~/components/ui/text'
 import EmojiPicker, { EmojiKeyboard } from 'rn-emoji-keyboard'
 import {Ionicons} from "@expo/vector-icons";
-import { BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle } from '~/components/ui/bottom-sheet'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle } from '~/components/ui/bottom-sheet-component'
+// import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useEmojiAvatar } from '~/hooks/useEmojiAvatar'
 
 export default function DPPage() {
@@ -25,7 +25,7 @@ export default function DPPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null)
   const [isConfirmSheetOpen, setIsConfirmSheetOpen] = useState(false)
-  const bottomSheetRef = useRef<BottomSheetModal>(null)
+  const bottomSheetRef = useRef(null)
 
 
   const { data: profile, isLoading } = useProfile(user?.id!)
@@ -254,7 +254,7 @@ export default function DPPage() {
         )}
       </ScrollView>
 
-      <BottomSheet
+      <BottomSheetComponent
         ref={bottomSheetRef}
         open={isConfirmSheetOpen}
         onOpenChange={setIsConfirmSheetOpen}
@@ -287,7 +287,7 @@ export default function DPPage() {
             </Button>
           </View>
         </BottomSheetContent>
-      </BottomSheet>
+      </BottomSheetComponent>
     </PageContainer>
   )
 }

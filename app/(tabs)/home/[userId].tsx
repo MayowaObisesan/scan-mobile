@@ -45,8 +45,8 @@ import {toast} from "sonner-native";
 import {Message, MessageWithDecryptedMessage} from "~/db/schema";
 import {FlashList} from "@shopify/flash-list";
 import {LinearGradient} from "expo-linear-gradient";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
-import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet-component";
+// import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
 import {Button} from "~/components/ui/button";
 import {Ionicons} from "@expo/vector-icons";
 import {LucidePin, LucideTrash, LucideTrash2} from "lucide-react-native";
@@ -191,7 +191,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
   const recordingTimerRef = useRef<NodeJS.Timeout>();
   const sendNewMessageAnimation = useRef(false);
-  const chatPressOptionsSheetRef = useRef<BottomSheetModal>(null);
+  const chatPressOptionsSheetRef = useRef(null);
   const currentChatBubbleRef = useRef<Partial<MessageWithDecryptedMessage> | null>(null);
   const [showChatOptionsSheet, setShowChatOptionsSheet] = useState<boolean>(false);
 
@@ -799,7 +799,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
 
           </PageBody>
 
-          <BottomSheet
+          <BottomSheetComponent
             ref={chatPressOptionsSheetRef}
             snapPoints={[300]}
             open={showChatOptionsSheet}
@@ -867,7 +867,7 @@ function ChatScreen({sender, recipient, threadId, messages, contactInfo}: {
                 </View>
               </View>
             </BottomSheetContent>
-          </BottomSheet>
+          </BottomSheetComponent>
         </ImageBackground>
       </PageContainer>
     </>

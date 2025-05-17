@@ -328,13 +328,13 @@ export function useChatContacts(user: User) {
     setFilteredContacts(scanContacts);
   }, [scanContacts]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
       if (
         appState.current.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
-        fetchContacts(true);
+        // fetchContacts(true);
         console.log("USE CONTACTS PAGE - NEXT APP STATE", nextAppState);
       }
       appState.current = nextAppState;
@@ -345,12 +345,12 @@ export function useChatContacts(user: User) {
     return () => {
       subscription.remove();
     };
-  }, [fetchContacts]);
+  }, []);*/
 
   const invalidateCache = useCallback(() => {
     chatContactsCache = null;
     fetchContacts(true);
-  }, [fetchContacts]);
+  }, []);
 
   return {
     unpaginatedContacts: scanContacts,

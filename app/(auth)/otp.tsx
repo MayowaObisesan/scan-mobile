@@ -67,6 +67,8 @@ export default function OTP() {
         }
       }
     } else if (existing) {
+      // Check if the user has a wallet, if not create a new wallet and add it to the profile.
+
       const username = `user_${userPhone.slice(-4)}`
       const {error: updateError} = await supabase.from('profiles')
         .update({

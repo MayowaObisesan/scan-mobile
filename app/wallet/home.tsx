@@ -19,8 +19,8 @@ import {useExchangeRates} from "~/hooks/useExchangeRates";
 import {useTransactionNotifications} from '~/hooks/useTransactionNotification';
 import {TransactionHistoryChart} from "~/components/wallet/TransactionHistoryChart";
 import * as Sharing from 'expo-sharing';
-import {BottomSheetModal, BottomSheetScrollView} from "@gorhom/bottom-sheet";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from '~/components/ui/bottom-sheet';
+// import {BottomSheetModal, BottomSheetScrollView} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from '~/components/ui/bottom-sheet-component';
 import {useWalletContext} from "~/contexts/WalletContext";
 import {LucideEllipsisVertical} from "lucide-react-native";
 import {Separator} from "~/components/ui/separator";
@@ -72,10 +72,11 @@ export default function WalletScreen() {
   const [sortCriteria, setSortCriteria] = useState<'date' | 'amount' | 'status'>('date');
   // State for transaction search
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const transactionDetailsSheetRef = useRef<BottomSheetModal>(null);
-  const backupWalletSheetRef = useRef<BottomSheetModal>(null);
-  const importWalletSheetRef = useRef<BottomSheetModal>(null);
-  const walletOptionsSheetRef = useRef<BottomSheetModal>(null);
+  const transactionDetailsSheetRef = useRef(null);
+  const backupWalletSheetRef = useRef(null);
+  const importWalletSheetRef = useRef(null);
+  const walletOptionsSheetRef = useRef(null);
+  const [showOptionsSheet, setShowOptionsSheet] = useState(false);
 
   // const sheetRef = useRef<BottomSheetMethods>(null);
   // ref
@@ -406,9 +407,9 @@ export default function WalletScreen() {
 
   return (
     <PageContainer>
-      <PageHeader className="mb-2">
+      <PageHeader showBackButton className="mb-2">
         <View className="flex-row justify-between items-center w-full">
-          <PageHeading className="text-3xl font-bold">Wallet</PageHeading>
+          <PageHeading className="text-2xl font-bold">Wallet Detail</PageHeading>
           <View className="flex-row gap-2">
             <TouchableOpacity
               onPress={() => {
@@ -654,7 +655,8 @@ export default function WalletScreen() {
                         <Button
                           size="icon"
                           variant="ghost"
-                          onPress={() => walletOptionsSheetRef.current?.present()}
+                          // onPress={() => walletOptionsSheetRef.current?.present()}
+                          onPress={() => setShowOptionsSheet(true)}
                         >
                           <Ionicons name="ellipsis-vertical" size={20} />
                         </Button>
@@ -997,8 +999,8 @@ export default function WalletScreen() {
           />*/}
         </ThemedView>}
 
-        <BottomSheet
-          ref={transactionDetailsSheetRef}
+        <BottomSheetComponent
+          // ref={transactionDetailsSheetRef}
           open={!!selectedTx}
           onOpenChange={() => setSelectedTx(null)}
         >
@@ -1040,7 +1042,7 @@ export default function WalletScreen() {
               </View>
             )}
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>
 
         {/*// Add transaction details modal at the bottom of your component:*/}
         {/*<Sheet open={!!selectedTx} onOpenChange={() => setSelectedTx(null)}>
@@ -1085,8 +1087,12 @@ export default function WalletScreen() {
         </Sheet>*/}
 
         {/* Backup Modal */}
-        <BottomSheet snapPoints={['25%', '50%', '90%']} ref={backupWalletSheetRef} open={!!backupWallet}
-                     onOpenChange={() => setBackupWallet(null)}>
+        <BottomSheetComponent
+          snapPoints={[25, 50, 90]}
+          // ref={backupWalletSheetRef}
+          open={!!backupWallet}
+          onOpenChange={() => setBackupWallet(null)}
+        >
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Backup Wallet</BottomSheetTitle>
@@ -1110,11 +1116,15 @@ export default function WalletScreen() {
               </View>
             )}
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>
 
         {/* Import Wallet Modal */}
-        <BottomSheet snapPoints={['25%', '50%']} ref={importWalletSheetRef} open={isImportModalOpen}
-                     onOpenChange={setIsImportModalOpen}>
+        <BottomSheetComponent
+          snapPoints={[25, 50]}
+          // ref={importWalletSheetRef}
+          open={isImportModalOpen}
+          onOpenChange={setIsImportModalOpen}
+        >
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Import Wallet</BottomSheetTitle>
@@ -1132,15 +1142,15 @@ export default function WalletScreen() {
               </Button>
             </View>
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>
 
         {/* WALLET OPTIONS */}
-        <BottomSheetModal name={"paymentWalletsSheet"} ref={walletOptionsSheetRef} stackBehavior={"push"} snapPoints={["55%"]}>
+        <BottomSheetComponent open={showOptionsSheet} onOpenChange={() => setShowOptionsSheet(false)} snapPoints={[55]}>
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Wallet Options</BottomSheetTitle>
             </BottomSheetHeader>
-            <BottomSheetScrollView contentContainerClassName={"pb-8"} className="py-4">
+            <ScrollView contentContainerClassName={"pb-8"} className="py-4">
               {/*<View className="px-4 mb-6">
                 <Text className="text-sm text-muted-foreground mb-4">
                   Manage your wallet settings and actions
@@ -1153,7 +1163,7 @@ export default function WalletScreen() {
                   <TouchableOpacity
                     className="items-center bg-secondary/60 rounded-3xl px-2 py-4 w-[30%]"
                     onPress={() => {
-                      walletOptionsSheetRef.current?.dismiss();
+                      // walletOptionsSheetRef.current?.dismiss();
                       refreshBalance(activePubkey!);
                     }}
                   >
@@ -1254,9 +1264,9 @@ export default function WalletScreen() {
                   <Text className="font-medium text-red-500">Delete Wallet</Text>
                 </TouchableOpacity>
               </View>
-            </BottomSheetScrollView>
+            </ScrollView>
           </BottomSheetContent>
-        </BottomSheetModal>
+        </BottomSheetComponent>
 
         {/*<BottomSheet
           detached

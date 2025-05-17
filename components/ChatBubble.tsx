@@ -17,9 +17,9 @@ import {formatDate} from "~/utils";
 import { Separator } from './ui/separator'
 import ContextMenu from "react-native-context-menu-view";
 import {HoldItem} from "react-native-hold-menu";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet-component";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "~/components/ui/accordion";
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
+// import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import {cn} from "~/lib/utils";
 import {Swipeable} from "react-native-gesture-handler";
 import {Link} from "expo-router";
@@ -64,7 +64,7 @@ export const ChatBubble = React.memo(function ChatBubble({
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
   const isFirstRender = useRef(true)
   const isNewMessage = useRef(true)
-  const chatPressOptionsSheetRef = useRef<BottomSheetModal>(null)
+  const chatPressOptionsSheetRef = useRef(null)
   const [showChatOptionsSheet, setShowChatOptionsSheet] = useState<boolean>(false);
 
   const MenuItems = [

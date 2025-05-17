@@ -42,3 +42,5 @@ expo-env.d.ts
 # @end expo-cli
 
 .idea
+
+dapp-store-build

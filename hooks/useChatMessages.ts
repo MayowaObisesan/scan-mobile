@@ -44,7 +44,7 @@ export const useRealTimeChatInsert = (userId: string, channelName: string) => {
             // Alert.alert("New message received", "CHAT SUBSCRIPTION RECEIVED");
             console.log("New message received", "CHAT SUBSCRIPTION RECEIVED");
 
-            if (db) {
+            /*if (db) {
               const latestMessage = db
                   .select()
                   .from(messages)
@@ -58,9 +58,9 @@ export const useRealTimeChatInsert = (userId: string, channelName: string) => {
               // Instructions on how to insert when insert subscription is received.
               // Perform an insert to the local DB using the threadId as params.
               // await messageRepository.createMessage(payload.new)
-            }
+            }*/
           }
-          toast.info("New message received", {description: "CHAT SUBSCRIPTION RECEIVED"});
+          // toast.info("New message received", {description: "CHAT SUBSCRIPTION RECEIVED"});
           queryClient.invalidateQueries({queryKey: ["chat_messages", channelName]});
         },
       )

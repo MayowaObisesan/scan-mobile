@@ -19,8 +19,8 @@ import {useExchangeRates} from "~/hooks/useExchangeRates";
 import {useTransactionNotifications} from '~/hooks/useTransactionNotification';
 import {TransactionHistoryChart} from "~/components/wallet/TransactionHistoryChart";
 import * as Sharing from 'expo-sharing';
-import {BottomSheetModal, BottomSheetScrollView} from "@gorhom/bottom-sheet";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from '~/components/ui/bottom-sheet';
+// import {BottomSheetModal, BottomSheetScrollView} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from '~/components/ui/bottom-sheet-component';
 import {useWalletContext} from "~/contexts/WalletContext";
 import {LucideEllipsisVertical} from "lucide-react-native";
 import {Separator} from "~/components/ui/separator";
@@ -75,10 +75,10 @@ export default function WalletScreen() {
   const [sortCriteria, setSortCriteria] = useState<'date' | 'amount' | 'status'>('date');
   // State for transaction search
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const transactionDetailsSheetRef = useRef<BottomSheetModal>(null);
-  const backupWalletSheetRef = useRef<BottomSheetModal>(null);
-  const importWalletSheetRef = useRef<BottomSheetModal>(null);
-  const walletOptionsSheetRef = useRef<BottomSheetModal>(null);
+  const transactionDetailsSheetRef = useRef(null);
+  const backupWalletSheetRef = useRef(null);
+  const importWalletSheetRef = useRef(null);
+  const walletOptionsSheetRef = useRef(null);
 
   // const sheetRef = useRef<BottomSheetMethods>(null);
   // ref
@@ -428,7 +428,8 @@ export default function WalletScreen() {
             <TouchableOpacity
               onPress={() => {
                 // Implement settings or help functionality
-                Alert.alert('Info', 'Wallet information and settings would go here');
+                // Alert.alert('Info', 'Wallet information and settings would go here');
+                router.push("/wallet/home")
               }}
               className="h-10 w-10 bg-secondary/50 rounded-full items-center justify-center"
             >
@@ -575,8 +576,8 @@ export default function WalletScreen() {
           />
         </ThemedView>
 
-        <BottomSheet
-          ref={transactionDetailsSheetRef}
+        <BottomSheetComponent
+          // ref={transactionDetailsSheetRef}
           open={!!selectedTx}
           onOpenChange={() => setSelectedTx(null)}
         >
@@ -590,7 +591,6 @@ export default function WalletScreen() {
                   <Ionicons name="close" size={22} color="#666" />
                 </Pressable>
               </View>
-              {/*<View className="w-12 h-1 bg-gray-300 rounded-full self-center my-2" />*/}
             </BottomSheetHeader>
             {selectedTx && (
               <View className="py-2">
@@ -681,7 +681,7 @@ export default function WalletScreen() {
               </View>
             )}
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>
 
         {/*// Add transaction details modal at the bottom of your component:*/}
         {/*<Sheet open={!!selectedTx} onOpenChange={() => setSelectedTx(null)}>
@@ -726,8 +726,8 @@ export default function WalletScreen() {
         </Sheet>*/}
 
         {/* Backup Modal */}
-        <BottomSheet snapPoints={['25%', '50%', '90%']} ref={backupWalletSheetRef} open={!!backupWallet}
-                     onOpenChange={() => setBackupWallet(null)}>
+        {/*<BottomSheetComponent snapPoints={['25%', '50%', '90%']} ref={backupWalletSheetRef} open={!!backupWallet}
+                              onOpenChange={() => setBackupWallet(null)}>
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Backup Wallet</BottomSheetTitle>
@@ -751,11 +751,11 @@ export default function WalletScreen() {
               </View>
             )}
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>*/}
 
         {/* Import Wallet Modal */}
-        <BottomSheet snapPoints={['25%', '50%']} ref={importWalletSheetRef} open={isImportModalOpen}
-                     onOpenChange={setIsImportModalOpen}>
+        {/*<BottomSheetComponent snapPoints={['25%', '50%']} ref={importWalletSheetRef} open={isImportModalOpen}
+                              onOpenChange={setIsImportModalOpen}>
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Import Wallet</BottomSheetTitle>
@@ -773,33 +773,33 @@ export default function WalletScreen() {
               </Button>
             </View>
           </BottomSheetContent>
-        </BottomSheet>
+        </BottomSheetComponent>*/}
 
         {/* WALLET OPTIONS */}
-        <BottomSheetModal name={"paymentWalletsSheet"} ref={walletOptionsSheetRef} stackBehavior={"push"} snapPoints={["55%"]}>
+        {/*<BottomSheetComponent ref={walletOptionsSheetRef} snapPoints={["55%"]}>
           <BottomSheetContent>
             <BottomSheetHeader>
               <BottomSheetTitle>Wallet Options</BottomSheetTitle>
             </BottomSheetHeader>
-            <BottomSheetScrollView contentContainerClassName={"pb-8"} className="py-4">
-              {/*<View className="px-4 mb-6">
+            <ScrollView contentContainerClassName={"pb-8"} className="py-4">
+              <View className="px-4 mb-6">
                 <Text className="text-sm text-muted-foreground mb-4">
                   Manage your wallet settings and actions
                 </Text>
-              </View>*/}
+              </View>
 
               <View className="px-2 mb-6">
-                {/*<Text className="font-semibold text-base mb-3">Quick Actions</Text>*/}
+                <Text className="font-semibold text-base mb-3">Quick Actions</Text>
                 <View className="flex-row flex-wrap gap-3">
                   <TouchableOpacity
                     className="items-center bg-secondary/60 rounded-3xl px-2 py-4 w-[30%]"
                     onPress={() => {
-                      walletOptionsSheetRef.current?.dismiss();
+                      // walletOptionsSheetRef.current?.dismiss();
                       refreshBalance(activePubkey!);
                     }}
                   >
                     <View className="h-12 w-12 bg-blue-100 rounded-full items-center justify-center mb-2">
-                      {/*<Ionicons name="refresh-outline" size={20} color="#0070f3" />*/}
+                      <Ionicons name="refresh-outline" size={20} color="#0070f3" />
                       <SolarRefreshBoldDuotoneIcon color="#0070f3" />
                     </View>
                     <Text className="text-xs font-medium text-center">Refresh Balance</Text>
@@ -808,12 +808,12 @@ export default function WalletScreen() {
                   <TouchableOpacity
                     className="items-center bg-secondary/60 rounded-3xl px-2 py-4 w-[30%]"
                     onPress={() => {
-                      walletOptionsSheetRef.current?.dismiss();
+                      // walletOptionsSheetRef.current?.dismiss();
                       getFaucet(activePubkey!);
                     }}
                   >
                     <View className="h-12 w-12 bg-green-100 rounded-full items-center justify-center mb-2">
-                      {/*<Ionicons name="water-outline" size={20} color="#10b981" />*/}
+                      <Ionicons name="water-outline" size={20} color="#10b981" />
                       <SolarWaterDropBoldDuotoneIcon color="#10b981" height={24} />
                     </View>
                     <Text className="text-xs font-medium text-center">Get Faucet</Text>
@@ -822,7 +822,7 @@ export default function WalletScreen() {
                   <TouchableOpacity
                     className="items-center bg-secondary/60 rounded-3xl px-2 py-4 w-[30%]"
                     onPress={() => {
-                      walletOptionsSheetRef.current?.dismiss();
+                      // walletOptionsSheetRef.current?.dismiss();
                       if (activeWallet) {
                         handleBackupWallet({
                           address: activeWallet.publicKey.toBase58(),
@@ -832,7 +832,7 @@ export default function WalletScreen() {
                     }}
                   >
                     <View className="h-12 w-12 bg-purple-100 rounded-full items-center justify-center mb-2">
-                      {/*<Ionicons name="shield-outline" size={20} color="#8b5cf6" />*/}
+                      <Ionicons name="shield-outline" size={20} color="#8b5cf6" />
                       <SolarShieldCheckIcon color="#8b5cf6" height={24} />
                     </View>
                     <Text className="text-xs font-medium text-center">Backup Wallet</Text>
@@ -848,14 +848,14 @@ export default function WalletScreen() {
                 <TouchableOpacity
                   className="flex-row items-center py-3 px-2"
                   onPress={() => {
-                    walletOptionsSheetRef.current?.dismiss();
+                    // walletOptionsSheetRef.current?.dismiss();
                     copyStringToClipboard(activePubkey!).then(() => {
                       Alert.alert('Copied', 'Wallet address copied to clipboard');
                     });
                   }}
                 >
                   <View className="h-10 w-10 bg-gray-100 rounded-full items-center justify-center mr-3">
-                    {/*<Ionicons name="copy-outline" size={18} color="#666" />*/}
+                    <Ionicons name="copy-outline" size={18} color="#666" />
                     <SolarCopyIcon height={24} color="#666" />
                   </View>
                   <Text className="font-medium">Copy Wallet Address</Text>
@@ -864,13 +864,13 @@ export default function WalletScreen() {
                 <TouchableOpacity
                   className="flex-row items-center py-3 px-2"
                   onPress={() => {
-                    walletOptionsSheetRef.current?.dismiss();
+                    // walletOptionsSheetRef.current?.dismiss();
                     // Implement rename wallet functionality
                     Alert.alert('Rename Wallet', 'Rename wallet functionality would go here');
                   }}
                 >
                   <View className="h-10 w-10 bg-gray-100 rounded-full items-center justify-center mr-3">
-                    {/*<Ionicons name="create-outline" size={18} color="#666" />*/}
+                    <Ionicons name="create-outline" size={18} color="#666" />
                     <SolarPen2BoldDuotoneIcon height={24} color="#666" />
                   </View>
                   <Text className="font-medium">Rename Wallet</Text>
@@ -881,7 +881,7 @@ export default function WalletScreen() {
                 <TouchableOpacity
                   className="flex-row items-center py-3 px-2"
                   onPress={() => {
-                    walletOptionsSheetRef.current?.dismiss();
+                    // walletOptionsSheetRef.current?.dismiss();
                     Alert.prompt('Delete Wallet', 'Are you sure you want to delete this wallet?', (text) => {
                       Alert.alert('Deleted', `Wallet deleted`);
                       deleteWallet(activePubkey!);
@@ -889,15 +889,15 @@ export default function WalletScreen() {
                   }}
                 >
                   <View className="h-10 w-10 bg-red-100 rounded-full items-center justify-center mr-3">
-                    {/*<Ionicons name="trash-outline" size={18} color="#ef4444" />*/}
+                    <Ionicons name="trash-outline" size={18} color="#ef4444" />
                     <SolarTrashIcon height={24} color="#ef4444" />
                   </View>
                   <Text className="font-medium text-red-500">Delete Wallet</Text>
                 </TouchableOpacity>
               </View>
-            </BottomSheetScrollView>
+            </ScrollView>
           </BottomSheetContent>
-        </BottomSheetModal>
+        </BottomSheetComponent>*/}
 
         {/*<BottomSheet
           detached

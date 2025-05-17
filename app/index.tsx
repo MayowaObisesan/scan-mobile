@@ -26,6 +26,7 @@ export default function RootScreen() {
   const { user, loading } = useAuth()
 
   if (loading) return null
+
   // return <Redirect href={user ? '/(tabs)/home' : '/(auth)/login'} />
 
   function updateProgressValue() {

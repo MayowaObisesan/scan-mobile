@@ -8,8 +8,8 @@ import {I_Profile} from "~/hooks/useProfile";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion';
 import {Keypair} from "@solana/web3.js";
 import {Text} from "~/components/ui/text"
-import {BottomSheetModal, BottomSheetScrollView, BottomSheetTextInput} from "@gorhom/bottom-sheet";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
+// import {BottomSheetModal, BottomSheetScrollView, BottomSheetTextInput} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet-component";
 import {Button} from "~/components/ui/button";
 
 interface PaymentFormSheetProps {
@@ -31,7 +31,7 @@ export interface PaymentFormData {
 
 // Memoized AmountInput Component
 const AmountInput = React.memo(({ value, onChangeText }: { value?: string; onChangeText: (text: string) => void }) => (
-  <BottomSheetTextInput
+  <TextInput
     className="p-4 border border-input rounded-lg bg-background text-secondary-foreground"
     placeholder="Amount"
     value={value}
@@ -43,7 +43,7 @@ const AmountInput = React.memo(({ value, onChangeText }: { value?: string; onCha
 
 // Memoized DescriptionInput Component
 const DescriptionInput = React.memo(({ value, onChangeText }: { value?: string; onChangeText: (text: string) => void }) => (
-  <BottomSheetTextInput
+  <TextInput
     className="p-4 border border-gray-300 rounded-lg bg-background text-secondary-foreground"
     placeholder="Add a short description"
     value={value}
@@ -60,8 +60,8 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
   recipient,
 }) => {
   const { walletsList, isLoading, activeWallet, selectWallet } = useWallets();
-  const paymentFormSheetRef = useRef<BottomSheetModal>(null);
-  const paymentWalletsSheetRef = useRef<BottomSheetModal>(null);
+  const paymentFormSheetRef = useRef(null);
+  const paymentWalletsSheetRef = useRef(null);
   const [isWalletSelectOpen, setIsWalletSelectOpen] = useState(false);
   // const [amount, setAmount] = useState('');
   // const [label, setLabel] = useState('');
@@ -79,7 +79,7 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
 
   console.log("Inside payment form sheet");
 
-  const selectedWallet = walletsList.find(w => w.id === formData.walletId);
+  const selectedWallet = walletsList[0] || walletsList.find(w => w.id === formData.walletId);
 
   // Optimized implementation
   const handleAmountChange = (text: string) => {
@@ -95,16 +95,17 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
   const handleSelectWallet = (wallet: any) => {
     setFormData({ ...formData, walletId: wallet.id, walletKeypair: wallet.keypair });
     setIsWalletSelectOpen(false);
-    paymentWalletsSheetRef.current?.close();
+    // paymentWalletsSheetRef.current?.close();
   };
 
   return (
     <View>
-      <BottomSheet
-          ref={paymentFormSheetRef}
+      <BottomSheetComponent
+          // ref={paymentFormSheetRef}
           // stackBehavior={"replace"}
           open={isOpen}
           onOpenChange={onClose}
+          snapPoints={[20,40,80]}
       >
         <BottomSheetContent>
           <BottomSheetHeader>
@@ -123,7 +124,11 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
             <View className="relative">
               <TouchableOpacity
                 // onPress={() => setIsWalletSelectOpen(true)}
-                onPress={() => paymentWalletsSheetRef.current?.present()}
+                // onPress={() => paymentWalletsSheetRef.current?.present()}
+                // onPress={() => {
+                //   // setIsSelectOpen(true)
+                //   // onClose();
+                // }}
                 className="p-4 border border-gray-300 rounded-lg bg-background flex-row justify-between items-center"
               >
                 <View>
@@ -238,14 +243,24 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
             </Button>
           </View>
         </BottomSheetContent>
-      </BottomSheet>
+      </BottomSheetComponent>
 
-      <BottomSheetModal style={{marginHorizontal: 8}} name={"paymentWalletsSheet"} ref={paymentWalletsSheetRef} snapPoints={["50"]} bottomInset={16} enableDynamicSizing detached stackBehavior={"push"}>
+      <BottomSheetComponent
+        // style={{marginHorizontal: 8}}
+        // name={"paymentWalletsSheet"}
+        snapPoints={[50]}
+        // bottomInset={16}
+        // enableDynamicSizing
+        // detached
+        // stackBehavior={"push"}
+        open={isSelectOpen}
+        onOpenChange={() => setIsSelectOpen(false)}
+      >
         <BottomSheetContent>
           <BottomSheetHeader>
             <BottomSheetTitle>Select Wallet</BottomSheetTitle>
           </BottomSheetHeader>
-          <BottomSheetScrollView contentContainerClassName={"pb-8"} className="py-4">
+          <ScrollView contentContainerClassName={"pb-8"} className="py-4">
             {walletsList?.map((wallet) => (
               <TouchableOpacity
                 key={wallet.id}
@@ -259,9 +274,9 @@ export const PaymentFormSheet: React.FC<PaymentFormSheetProps> = ({
                 <Text className="text-xs text-gray-500">{wallet.address}</Text>
               </TouchableOpacity>
             ))}
-          </BottomSheetScrollView>
+          </ScrollView>
         </BottomSheetContent>
-      </BottomSheetModal>
+      </BottomSheetComponent>
     </View>
   );
 };

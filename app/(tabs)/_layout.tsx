@@ -33,6 +33,7 @@ import SolarUserBoldDuotoneIcon from "~/icon/UserBoldDuotoneIcon";
 import SolarGlobeDuotoneIcon from "~/icon/GlobeDuotoneIcon";
 import SolarSettingsDuotoneIcon from "~/icon/SettingsDuotoneIcon";
 import SolarMagnifierBoldDuotoneIcon from "~/icon/MagnifierBoldDuotoneIcon";
+import { useEffect } from 'react';
 
 
 export default function TabLayout() {
@@ -66,6 +67,7 @@ export default function TabLayout() {
         const myContacts = await contactsRepository.myContacts();
         const localChatThreadsData = await threadRepository.getLocalChatThreads(user!);
         const convertedLocalChatThreads = convertLocalThreadsToServerThreads(localChatThreadsData);
+        console.log("SYNCING CONTACTS SERVER PROFILES WITH LOCAL DB - CONVERTED", Array.from(myContacts?.flatPhones!)?.length);
 
         try {
             const {data, error} = await supabase
@@ -73,7 +75,10 @@ export default function TabLayout() {
               .select("*")
               .in('phone', Array.from([...myContacts?.flatPhones!, ...convertedLocalChatThreads || []]));
 
-            if (error) throw error;
+            if (error) {
+                console.error("SYNCING CONTACTS SERVER PROFILE WITH LOCAL DB - ERROR", error.message);
+                throw error
+            }
 
             // Save this data to the localDB
             const convertedServerProfile = convertServerProfileToLocalProfile(data)
@@ -132,7 +137,13 @@ export default function TabLayout() {
 
     console.log("Sync Engine initialized")
 
-    AppState.addEventListener('change', (nextState) => {
+    useEffect(() => {
+        syncServerChatThreadsWithLocalDB();
+        syncServerChatsWithLocalDB();
+        syncContactsServerProfilesWithLocalDB();
+    }, []);
+
+    /*AppState.addEventListener('change', (nextState) => {
         console.log("TAB LAYOUT APP STATE", nextState)
         if (nextState === 'active') {
             try {
@@ -150,7 +161,7 @@ export default function TabLayout() {
             syncEngine.cleanup()
             console.log("TAB LAYOUT APP STATE IS IN BACKGROUND")
         }
-    })
+    })*/
 
     return (
         <Tabs

@@ -9,8 +9,8 @@ import {useExchangeRates} from "~/hooks/useExchangeRates";
 import {PublicKey} from "@solana/web3.js";
 import {sendSol} from "~/solana/wallet";
 import {useWalletContext} from "~/contexts/WalletContext";
-import { BottomSheet } from "~/components/ui/bottom-sheet";
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
+import { BottomSheetComponent } from "~/components/ui/bottom-sheet-component";
+// import {BottomSheetModal} from "@gorhom/bottom-sheet";
 
 export default function SendScreen() {
   const {activePubkey, activeWallet, loadWallets, selectWallet, refreshBalance, walletsList} = useWalletContext();
@@ -19,7 +19,7 @@ export default function SendScreen() {
   const [amount, setAmount] = useState('')
   const [selectedCurrency, setSelectedCurrency] = useState<'usd' | 'eur' | 'ngn' | 'gbp'>('usd');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef(null);
 
   const convertToFiat = (solBalance: number, currency?: string) => {
     const rate = rates[currency || selectedCurrency] || 0;
@@ -29,7 +29,7 @@ export default function SendScreen() {
   const handleSelectWallet = (wallet) => {
     selectWallet(wallet);
     setIsSheetOpen(false);
-    bottomSheetRef.current?.close();
+    // bottomSheetRef.current?.close();
   };
 
   const snapPoints = useMemo(() => ['40%'], []);
@@ -162,8 +162,8 @@ export default function SendScreen() {
         </View>
 
         {/* BottomSheet for wallet selection */}
-        <BottomSheet
-          ref={bottomSheetRef}
+        <BottomSheetComponent
+          // ref={bottomSheetRef}
           open={isSheetOpen}
           onOpenChange={() => setIsSheetOpen(false)}
           // index={-1}
@@ -187,7 +187,7 @@ export default function SendScreen() {
               </TouchableOpacity>
             ))}
           </View>
-        </BottomSheet>
+        </BottomSheetComponent>
       </PageBody>
     </PageContainer>
   )

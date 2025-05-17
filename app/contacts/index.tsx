@@ -113,31 +113,23 @@ export default function ContactsPage() {
     });
   }, [phoneContacts, scanAccounts]);
 
-  if (isLoading) {
-    return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
   // Handle pull-to-refresh
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch(true);
     setRefreshing(false);
-  }, [refetch]);
+  }, []);
 
   // Handle search input
   const handleSearch = useCallback((text: string) => {
     searchContacts(text);
-  }, [searchContacts]);
+  }, []);
 
   // Handle sort selection
   const handleSort = useCallback((field: keyof Contact) => {
     const newOrder = sortConfig.field === field && sortConfig.order === 'asc' ? 'desc' : 'asc';
     sortContacts(field, newOrder);
-  }, [sortConfig, sortContacts]);
+  }, [sortConfig]);
 
   // Handle loading more contacts when reaching the end of the list
   const handleLoadMore = useCallback(() => {
@@ -158,6 +150,14 @@ export default function ContactsPage() {
   // Key extractors for FlatList
   const scanContactKeyExtractor = useCallback((item: ContactInfo) => item.id, []);
   const phoneContactKeyExtractor = useCallback((item: Contact) => item.id, []);
+
+  /*if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }*/
 
   return (
     <PageContainer>

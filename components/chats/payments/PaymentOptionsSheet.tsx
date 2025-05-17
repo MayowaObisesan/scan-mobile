@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '~/components/ui/sheet';
 import {Button} from "~/components/ui/button";
-import {BottomSheet, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet";
-import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import {BottomSheetComponent, BottomSheetContent, BottomSheetHeader, BottomSheetTitle} from "~/components/ui/bottom-sheet-component";
+// import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
 import {Text} from "~/components/ui/text";
 import SolarLinkBoldDuotoneIcon from "~/icon/LinkBoldDuotoneIcon";
 import SolarCardSendIcon from "~/icon/CardSendIcon";
@@ -22,10 +22,10 @@ export const PaymentOptionsSheet: React.FC<PaymentOptionsSheetProps> = ({
   onCreateLink,
   onMakePayment,
 }) => {
-  const paymentOptionSheetRef = useRef<BottomSheetModal>(null);
+  const paymentOptionSheetRef = useRef(null);
 
   return (
-    <BottomSheet snapPoints={['25%']} ref={paymentOptionSheetRef} open={isOpen} onOpenChange={onClose}>
+    <BottomSheetComponent snapPoints={[25]} open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent>
         <BottomSheetHeader>
           <BottomSheetTitle>Payment Options</BottomSheetTitle>
@@ -65,6 +65,6 @@ export const PaymentOptionsSheet: React.FC<PaymentOptionsSheetProps> = ({
           </TouchableOpacity>*/}
         </View>
       </BottomSheetContent>
-    </BottomSheet>
+    </BottomSheetComponent>
   );
 };
